@@ -8,9 +8,9 @@ namespace AvaloniaReversy.ViewModels
 {
     public class GameViewModel
     {
-        private Game.Core _core;
+        private ReversyEngine.Core _core;
 
-        public GameViewModel(Game.Core core) 
+        public GameViewModel(ReversyEngine.Core core) 
         {
             _core = core;
         }

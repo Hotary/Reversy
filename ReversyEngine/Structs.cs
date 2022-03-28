@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AvaloniaReversy.Game
+namespace ReversyEngine
 {
     public enum CoreState
     {
@@ -39,8 +39,8 @@ namespace AvaloniaReversy.Game
 
     public struct Line
     {
-        public Position Point1;
-        public Position Point2;
+        public Position Start;
+        public Position End;
     }
 
     public delegate bool IsCanClicked(Position position);

@@ -12,9 +12,9 @@ namespace AvaloniaReversy.ViewModels
     public class CellViewModel: ViewModelBase
     {
         private static Avalonia.Media.BrushConverter converter = new Avalonia.Media.BrushConverter();
-        Game.Cell _cell;
+        ReversyEngine.Cell _cell;
 
-        public CellViewModel(Game.Cell cell) 
+        public CellViewModel(ReversyEngine.Cell cell) 
         {
             _cell = cell;
             _cell.UpdateStatus += Update;
@@ -34,6 +34,9 @@ namespace AvaloniaReversy.ViewModels
                 return null;
             }
         }
+
+        public int X => _cell.Position.X;
+        public int Y => _cell.Position.Y;
 
         private bool isCanClicked() => _cell.IsCanClicked(_cell.Position);
 

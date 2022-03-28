@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AvaloniaReversy.Game
+namespace ReversyEngine
 {
     public class Cell
     {
         public IsCanClicked IsCanClicked { get; protected internal set; }
         public Action<Cell> action { get; protected internal set; }
         public Position Position { get; private set; }
-        public Chip? Chip { get; set; }
-        public Action UpdateStatus { get; protected internal set; }
+        public Chip Chip { get; set; }
+        public Action UpdateStatus { get; set; }
 
         public Cell(Position position)
         {
@@ -24,7 +24,7 @@ namespace AvaloniaReversy.Game
             Position = new Position(x, y);
         }
 
-        public void Action() 
+        public void Action()
         {
             action?.Invoke(this);
         }

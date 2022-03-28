@@ -9,9 +9,15 @@ namespace AvaloniaReversy.Views
 {
     public partial class MainWindow : Window
     {
-        private Game.Core _core;
+        class Params : ReversyEngine.CoreInit
+        {
+            public string ColorPlayer1 => "#FFFFFF";
 
-        public string StartPattern => @"00000000|
+            public string ColorPlayer2 => "#000000";
+
+            public ReversyEngine.SizeField Size => new ReversyEngine.SizeField() { X = 8, Y = 8 };
+
+            public string StartPattern => @"00000000|
                                             00000000|
                                             00000000|
                                             00012000|
@@ -19,33 +25,51 @@ namespace AvaloniaReversy.Views
                                             00000000|
                                             00000000|
                                             00000000";
+        }
+
+        private ReversyEngine.Core _core;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _core = new Game.Core("#FFFFFF", "#000000", new Game.SizeField() { X = 8, Y = 8 }, StartPattern)
+            _core = new ReversyEngine.Core(new Params())
             {
-                Finder = new Game.LineFinder()
+                Finder = new ReversyEngine.LineFinder()
             };
             CoreControl = this.FindControl<GameControl>("CoreControl");
             CoreControl.Width = _core.CurrentSize.X;
             CoreControl.Height = _core.CurrentSize.Y;
 
-            //В даьнейшем добавить итератор
-            for (var x = 0; x < _core.CurrentSize.X; x++)
-                for (var y = 0; y < _core.CurrentSize.Y; y++) 
+            _core.StateChanged = (core) => 
+            {
+                if (core.State == ReversyEngine.CoreState.Move)
+                    core.NextState();
+            };
+
+            foreach (var cell in _core.Field)
+            {
+                var vm = new ViewModels.CellViewModel(cell);
+                var control = new CellControl()
                 {
-                    var cell = new ViewModels.CellViewModel(_core.Field[x, y]);
-                    var control = new CellControl()
+                    DataContext = vm,
+                    IsCanClicked = vm.IsCanClicked,
+                };
+                control.PointerPressed += (s, args) => 
+                {
+                    if (_core.State == ReversyEngine.CoreState.Waiting)
                     {
-                        DataContext = cell,
-                        IsCanClicked = cell.IsCanClicked,
-                    };
-                    control.PointerPressed += (s, args) => { cell.Action(); };
-                    CoreControl.AddChip(control, x, y);
-                }
-                    
+                        cell.Action();
+                        _core.NextState();
+                    }
+                };
+                CoreControl.AddChip(control, vm.X, vm.Y);
+            }           
+        }
+
+        private void UpdateMoving() 
+        {
+
         }
     }
 }
