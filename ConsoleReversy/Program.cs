@@ -42,6 +42,8 @@ namespace ConsoleReversy
         static ConsoleColor foregroundUnactivePlayer = ConsoleColor.Black;
         static ConsoleColor backgroundActivePlayer = ConsoleColor.Blue;
         static ConsoleColor foregroundActivePlayer = ConsoleColor.White;
+        static int MarginScore = 3;
+        static int WhitespacesNickname = 2;
 
         static string PatternScore = "{0}: {1:000}";
         #endregion
@@ -193,8 +195,8 @@ namespace ConsoleReversy
         {
             var player1 = GetPlayerScore(ReversyEngine.Player.Player1);
             var player2 = GetPlayerScore(ReversyEngine.Player.Player2);
-            var width = (WindowWidth - player1.Length - player2.Length) - 10;
-            var margin = new string(PatternLine, 3);
+            var width = WindowWidth - player1.Length - player2.Length - (MarginScore + WhitespacesNickname) * 2;
+            var margin = new string(PatternLine, MarginScore);
             var center = new string(PatternLine, width);
 
             Console.WriteLine("{0} {2} {1} {3} {0}", margin, center, player1, player2);
