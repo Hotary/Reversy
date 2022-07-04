@@ -8,10 +8,11 @@ namespace Tests
 {
     class TestCoreConstructor
     {
+
         [TestCaseSource(nameof(Cases))]
         public void Test(string colorPlayer1, string colorPlayer2, int x, int y, string pattern)
         {
-            var core = new Core(colorPlayer1, colorPlayer2, new SizeField() { X = x, Y = y }, pattern);
+            var core = MakeCore(colorPlayer1, colorPlayer2, x, y, pattern);
             Assert.IsNotNull(core);
             Assert.AreEqual(core.Chips[Player.Player1].Color, colorPlayer1);
             Assert.AreEqual(core.Chips[Player.Player2].Color, colorPlayer2);
@@ -56,6 +57,33 @@ namespace Tests
                 new object[]{"#000000", "#FFFFFF", 8, 8, f[2] }
             };
             return data;
+        }
+
+        public class Params : ReversyEngine.CoreInit
+        {
+            public string ColorPlayer1 { get; set; }
+
+            public string ColorPlayer2 { get; set; }
+
+            public ReversyEngine.SizeField Size { get; set; }
+
+            public string StartPattern { get; set; }
+        }
+
+        static private Core MakeCore(string colorPlayer1, string colorPlayer2, int x, int y, string pattern)
+        {
+            var _params = new Params()
+            {
+                ColorPlayer1 = colorPlayer1,
+                ColorPlayer2 = colorPlayer2,
+                Size = new SizeField() { X = x, Y = y },
+                StartPattern = pattern
+            };
+
+            return new Core(_params)
+            {
+                Finder = new ReversyEngine.LineFinder()
+            };
         }
     }
 }

@@ -87,10 +87,31 @@ namespace Tests
             return data;
         }
 
-        static private Core MakeCore(int x, int y, string pattern) => new Core(null, null, new SizeField() { X = x, Y = y }, pattern)
+
+        public class Params : ReversyEngine.CoreInit
         {
-            Finder = new ReversyEngine.LineFinder()
-        };
+            public string ColorPlayer1 => null;
+
+            public string ColorPlayer2 => null;
+
+            public ReversyEngine.SizeField Size { get; set; }
+
+            public string StartPattern { get; set; }
+        }
+
+        static private Core MakeCore(int x, int y, string pattern)
+        {
+            var _params = new Params()
+            {
+                Size = new SizeField() { X = x, Y = y },
+                StartPattern = pattern
+            };
+
+            return new Core(_params)
+            {
+                Finder = new ReversyEngine.LineFinder()
+            };
+        }
 
         static private List<string> clickedFields = new List<string>
         {

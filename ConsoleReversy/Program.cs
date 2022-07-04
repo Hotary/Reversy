@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 namespace ConsoleReversy
 {
 
-    class Params : ReversyEngine.CoreInit
+    public class Params : ReversyEngine.CoreInit
     {
         public string ColorPlayer1 => "#FFFFFF";
 
@@ -73,8 +73,7 @@ namespace ConsoleReversy
 
         static void Main(string[] args)
         {
-            var p = new Params();
-            _core = new ReversyEngine.Core(p.ColorPlayer1, p.ColorPlayer2, p.Size, p.StartPattern)
+            _core = new ReversyEngine.Core(new Params())
             {
                 Finder = new ReversyEngine.LineFinder()
             };
