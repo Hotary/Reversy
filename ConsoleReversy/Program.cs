@@ -59,6 +59,9 @@ namespace ConsoleReversy
             ConsoleColor.Black
         };
 
+        static int CellWidth = 3;
+        static int FieldMargin = 8;
+
         static string PatternChip = " o ";
         static string PatternCell = " # ";
         static string PatternColumn = " {0} ";
@@ -261,26 +264,24 @@ namespace ConsoleReversy
         {
             var delta = new string(' ', (WindowWidth - _core.CurrentSize.X * 3 - 8) / 2);
             Console.Write(delta);
-            Console.BackgroundColor = backgroundField;
-            Console.ForegroundColor = foregroundFieldHeader;
+            SetFieldHeaderColor();
             Console.Write(PatternDelta);
+
             for (int x = 0; x < _core.CurrentSize.X; x++) 
-            {
                 Console.Write(PatternColumn, (char)('A' + x));
-            }
+
             Console.WriteLine(PatternDelta);
             for (int y = 0; y < _core.CurrentSize.Y; y++)
             {
-                Console.BackgroundColor = background;
+                SetDefaultColor();
                 Console.Write(delta);
-                Console.BackgroundColor = backgroundField;
-                Console.ForegroundColor = foregroundFieldHeader;
+                SetFieldHeaderColor();
                 Console.Write(PatternRow, y);
+
                 for (int x = 0; x < _core.CurrentSize.X; x++)
-                {
                     if (_core.Field[x, y].Chip is null)
                     {
-                        Console.ForegroundColor = foregroundField;
+                        SetFieldColor();
                         Console.Write(PatternCell);
                     }
                     else 
@@ -288,13 +289,30 @@ namespace ConsoleReversy
                         Console.ForegroundColor = foregroundPlayer[(int)_core.Field[x, y].Chip.Player - 1];
                         Console.Write(PatternChip);
                     }
-                }
+
                 Console.WriteLine(PatternDelta);
-                Console.BackgroundColor = background;
+                SetDefaultColor();
                 Console.Write(delta);
-                Console.BackgroundColor = backgroundField;
+                SetFieldColor();
                 Console.WriteLine(new string(' ', _core.CurrentSize.X * 3 + 8));
             }
+            SetDefaultColor();
+        }
+
+        static void SetFieldHeaderColor()
+        {
+            Console.BackgroundColor = backgroundField;
+            Console.ForegroundColor = foregroundFieldHeader;
+        }
+
+        static void SetFieldColor()
+        {
+            Console.BackgroundColor = backgroundField;
+            Console.ForegroundColor = foregroundField;
+        }
+
+        static void SetDefaultColor()
+        {
             Console.BackgroundColor = background;
             Console.ForegroundColor = foreground;
         }
