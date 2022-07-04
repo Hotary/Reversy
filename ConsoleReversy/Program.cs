@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using ReversyEngine;
 
 namespace ConsoleReversy
 {
@@ -90,8 +91,8 @@ namespace ConsoleReversy
 
         static void Game() 
         {
-            SetActiveScorePlayer(ReversyEngine.Player.Player1);
-            SetActiveScorePlayer(ReversyEngine.Player.Player2, false);
+            SetActivePlayer(ReversyEngine.Player.Player1);
+            SetUnactivePlayer(ReversyEngine.Player.Player2);
             while (_core.State != ReversyEngine.CoreState.GameOver) 
             {
 
@@ -202,28 +203,16 @@ namespace ConsoleReversy
             Console.WriteLine("{0} {2} {1} {3} {0}", margin, center, player1, player2);
         }
 
-        public static void SetActiveScorePlayer(ReversyEngine.Player player) 
+        public static void SetActiveScorePlayer(Player player) 
         {
-            switch (player) 
-            {
-                case ReversyEngine.Player.Player1:
-                    SetActiveScorePlayer(ReversyEngine.Player.Player1, true);
-                    SetActiveScorePlayer(ReversyEngine.Player.Player2, false);
-                    break;
-                case ReversyEngine.Player.Player2:
-                    SetActiveScorePlayer(ReversyEngine.Player.Player1, false);
-                    SetActiveScorePlayer(ReversyEngine.Player.Player2, true);
-                    break;
-            }
+            SetActivePlayer(player); SetUnactivePlayer(GetOtherPlayer(player));
         }
 
-        public static void SetActiveScorePlayer(ReversyEngine.Player player, bool active) 
-        {
-            if (active)
-                PrintScorePlayer(player, backgroundActivePlayer, foregroundActivePlayer);
-            else
-                PrintScorePlayer(player, backgroundUnactivePlayer, foregroundUnactivePlayer);
-        }
+        public static Player GetOtherPlayer(Player player) => player == Player.Player1 ? Player.Player2 : Player.Player1;
+
+        public static void SetActivePlayer(ReversyEngine.Player player) => PrintScorePlayer(player, backgroundActivePlayer, foregroundActivePlayer);
+        public static void SetUnactivePlayer(ReversyEngine.Player player) =>  PrintScorePlayer(player, backgroundUnactivePlayer, foregroundUnactivePlayer);
+
 
         static void PrintScorePlayer(ReversyEngine.Player player, ConsoleColor background, ConsoleColor foreground) 
         {
