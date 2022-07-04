@@ -151,33 +151,36 @@ namespace ReversyEngine
                 return;
 
             changedCells = new List<Cell>();
-            for (int i = 0; i < 8 && list[i] is object; i++)
+
+            foreach (var line in list) 
             {
-                var line = list[i];
-                var dX = (int)(line?.Start.X - line?.End.X);
-                var dY = (int)(line?.Start.Y - line?.End.Y);
-                var stepX = 0;
-                var stepY = 0;
+                if (line is null) break;
+                var d = line.Value.Delta();
+                var dStep = new Position();
                 var step = 0;
-                if (dX != 0)
-                {
-                    stepX = dX / Math.Abs(dX);
-                    step = dX / stepX;
-                }
-                if (dY != 0)
-                {
-                    stepY = dY / Math.Abs(dY);
-                    step = dY / stepY;
-                }
+                GetDeltaStep(ref dStep.X, d.X, ref step);
+                GetDeltaStep(ref dStep.Y, d.Y, ref step);
+
+
+                var startPoint = line.Value.Start;
                 for (int j = 0; j < step; j++)
                 {
-                    var _cell = Field[(int)line?.Start.X - stepX * j, (int)line?.Start.Y - stepY * j];
+                    var newPoint = startPoint - dStep * j;
+                    var _cell = Field[newPoint.X, newPoint.Y];
                     _cell.Chip = Chips[CurrentPlayer];
                     changedCells.Add(_cell);
                     _cell.UpdateStatus?.Invoke();
                 }
             }
+        }
 
+        private void GetDeltaStep(ref int s, int position, ref int step)
+        {
+            if (position != 0)
+            {
+                s = position / Math.Abs(position);
+                step = position / s;
+            }
         }
     }
 }

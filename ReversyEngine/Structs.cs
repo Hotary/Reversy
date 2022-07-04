@@ -42,6 +42,15 @@ namespace ReversyEngine
             return pos1.X == pos2.X && pos1.Y == pos2.Y;
         }
 
+        public static Position operator -(Position pos1, Position pos2)
+        {
+            return new Position(pos1.X - pos2.X, pos1.Y - pos2.Y);
+        }
+
+        public static Position operator *(Position pos, int i)
+        {
+            return new Position(pos.X * i, pos.Y * i);
+        }
         public static bool operator !=(Position pos1, Position pos2)
         {
             return pos1.X != pos2.X || pos1.Y != pos2.Y;
@@ -57,6 +66,7 @@ namespace ReversyEngine
     {
         public Position Start;
         public Position End;
+        public Position Delta() => Start - End;
     }
 
     public delegate bool IsCanClicked(Position position);
