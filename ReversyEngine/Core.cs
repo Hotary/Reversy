@@ -31,29 +31,28 @@ namespace ReversyEngine
 
         private List<Cell> changedCells;
 
-
-        public Core(CoreInit args)
+        public Core(string cP1, string cP2, SizeField size, string p)
         {
-            Field = new Field(args.Size, IsCanClicked, ClickedCell);
+            Field = new Field(size, IsCanClicked, ClickedCell);
             Chips = new Dictionary<Player, Chip>()
             {
-                { Player.Player1, new Chip(Player.Player1, args.ColorPlayer1) },
-                { Player.Player2, new Chip(Player.Player2, args.ColorPlayer2) }
+                { Player.Player1, new Chip(Player.Player1, cP1) },
+                { Player.Player2, new Chip(Player.Player2, cP2) }
             };
             CountChips = new Dictionary<Player, int>()
-            {
-                {Player.Player1, 0},
-                {Player.Player2, 0}
-            };
+                {
+                    {Player.Player1, 0},
+                    {Player.Player2, 0}
+                };
 
             int[,] pattern = new int[CurrentSize.X, CurrentSize.Y];  // First dimension - X; second dimension - Y;
 
-            string[] splitted = args.StartPattern.Split('|');
-            for (int x = 0; x < CurrentSize.X; x++)
+            string[] splitted = p.Split('|');
+            for (int y = 0; y < CurrentSize.Y; y++)
             {
-                var trimmed = splitted[x].Trim();
-                for (int y = 0; y < CurrentSize.Y; y++)
-                    pattern[x, y] = trimmed[y] - '0';
+                var trimmed = splitted[y].Trim();
+                for (int x = 0; x < CurrentSize.X; x++)
+                    pattern[x, y] = trimmed[x] - '0';
             }
 
             for (int x = 0; x < CurrentSize.X; x++)
@@ -61,13 +60,46 @@ namespace ReversyEngine
                 {
                     var player = (Player)pattern[x, y];
                     if (player == Player.Player1 || player == Player.Player2)
-                    {
                         Field[x, y].Chip = Chips[player];
-                        CountChips[player]++;
-                        Field.EmptyCells--;
-                    }
                 }
         }
+
+        //public Core(CoreInit args)
+        //{
+        //    Field = new Field(args.Size, IsCanClicked, ClickedCell);
+        //    Chips = new Dictionary<Player, Chip>()
+        //    {
+        //        { Player.Player1, new Chip(Player.Player1, args.ColorPlayer1) },
+        //        { Player.Player2, new Chip(Player.Player2, args.ColorPlayer2) }
+        //    };
+        //    CountChips = new Dictionary<Player, int>()
+        //    {
+        //        {Player.Player1, 0},
+        //        {Player.Player2, 0}
+        //    };
+
+        //    int[,] pattern = new int[CurrentSize.X, CurrentSize.Y];  // First dimension - X; second dimension - Y;
+
+        //    string[] splitted = args.StartPattern.Split('|');
+        //    for (int x = 0; x < CurrentSize.X; x++)
+        //    {
+        //        var trimmed = splitted[x].Trim();
+        //        for (int y = 0; y < CurrentSize.Y; y++)
+        //            pattern[x, y] = trimmed[y] - '0';
+        //    }
+
+        //    for (int x = 0; x < CurrentSize.X; x++)
+        //        for (int y = 0; y < CurrentSize.Y; y++)
+        //        {
+        //            var player = (Player)pattern[x, y];
+        //            if (player == Player.Player1 || player == Player.Player2)
+        //            {
+        //                Field[x, y].Chip = Chips[player];
+        //                CountChips[player]++;
+        //                Field.EmptyCells--;
+        //            }
+        //        }
+        //}
 
         public void NextState()
         {

@@ -32,8 +32,8 @@ namespace AvaloniaReversy.Views
         public MainWindow()
         {
             InitializeComponent();
-
-            _core = new ReversyEngine.Core(new Params())
+            var p = new Params();
+            _core = new ReversyEngine.Core(p.ColorPlayer1, p.ColorPlayer2, p.Size, p.StartPattern)
             {
                 Finder = new ReversyEngine.LineFinder()
             };

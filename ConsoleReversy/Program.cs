@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace ConsoleReversy
 {
@@ -22,13 +24,15 @@ namespace ConsoleReversy
                                         00000000";
     }
 
-    class Program
+    public class Program
     {
-        static ReversyEngine.Core _core;
+        public static ReversyEngine.Core _core;
 
         #region Application Properties
         static ConsoleColor background = ConsoleColor.Black;
         static ConsoleColor foreground = ConsoleColor.White;
+        public static int WindowWidth = 0;
+        public static int WindowHeight = 0;
 
         static char PatternLine = '#';
         #endregion
@@ -69,16 +73,19 @@ namespace ConsoleReversy
 
         static void Main(string[] args)
         {
-            _core = new ReversyEngine.Core(new Params())
+            var p = new Params();
+            _core = new ReversyEngine.Core(p.ColorPlayer1, p.ColorPlayer2, p.Size, p.StartPattern)
             {
                 Finder = new ReversyEngine.LineFinder()
             };
             _core.MovingHandler = OnMoving;
             _core.StateChanged = OnStatusChanged;
             Console.SetWindowSize(100, 30);
+            WindowWidth = Console.WindowWidth;
             PrintGameScreen();
             Game();
         }
+
 
         static void Game() 
         {
@@ -88,9 +95,8 @@ namespace ConsoleReversy
             {
 
                 Console.SetCursorPosition(0, 23);
-                         
-                Console.WriteLine(new string(' ', Console.WindowWidth));
-                Console.WriteLine(new string(' ', Console.WindowWidth));
+                Console.WriteLine(new string(' ',WindowWidth));
+                Console.WriteLine(new string(' ',WindowWidth));
                 try
                 {
                     Console.SetCursorPosition(0, 23);
@@ -99,7 +105,7 @@ namespace ConsoleReversy
                     Console.Write("\tSelect current row (0-{0}): ", _core.CurrentSize.Y - 1);
                     int row = int.Parse(Console.ReadLine());
 
-                    Console.Write(new string(' ', Console.WindowWidth));
+                    Console.Write(new string(' ',WindowWidth));
                     Console.Write("\r");
                     if ((col - 'A') < 0 || (col - 'A') >= _core.CurrentSize.X || row < 0 || row >= _core.CurrentSize.Y)
                     {
@@ -114,7 +120,7 @@ namespace ConsoleReversy
                     }
                     _core.ClickedCell(_core.Field[(col - 'A'), row]);
                     _core.NextState();
-                    Console.WriteLine("\tSelected cell ({0},{1})", col, row);
+                    Console.WriteLine("\tSelected cell ({0},{1})", (col - 'A'), row);
                 }
                 catch 
                 {
@@ -144,14 +150,14 @@ namespace ConsoleReversy
             core.NextState();
         }
 
-        static void SetPositionField(int x, int y)
+        public static void SetPositionField(int x, int y)
         {
             var delta = (Console.WindowWidth - _core.CurrentSize.X * 3 ) / 2;
             Console.SetCursorPosition(delta + x * 3, 6 + y * 2);
 
         }
 
-        static void SetChip(ReversyEngine.Player player, int x, int y)
+        public static void SetChip(ReversyEngine.Player player, int x, int y)
         {
             var left = Console.CursorLeft;
             var top = Console.CursorTop;
@@ -169,7 +175,7 @@ namespace ConsoleReversy
         }
 
 
-        static void PrintGameScreen() 
+        public static void PrintGameScreen() 
         {
             Console.WriteLine();
             PrintLine();
@@ -179,23 +185,23 @@ namespace ConsoleReversy
             PrintField();
         }
 
-        static void PrintLine() 
+        public static void PrintLine() 
         {
-            Console.WriteLine(new string(PatternLine, Console.WindowWidth));
+            Console.WriteLine(new string(PatternLine,WindowWidth));
         }
 
-        static void PrintScore()
+        public static void PrintScore()
         {
             var player1 = GetPlayerScore(ReversyEngine.Player.Player1);
             var player2 = GetPlayerScore(ReversyEngine.Player.Player2);
-            var width = (Console.WindowWidth - player1.Length - player2.Length) - 10;
+            var width = (WindowWidth - player1.Length - player2.Length) - 10;
             var margin = new string(PatternLine, 3);
             var center = new string(PatternLine, width);
 
             Console.WriteLine("{0} {2} {1} {3} {0}", margin, center, player1, player2);
         }
 
-        static void SetActiveScorePlayer(ReversyEngine.Player player) 
+        public static void SetActiveScorePlayer(ReversyEngine.Player player) 
         {
             switch (player) 
             {
@@ -210,7 +216,7 @@ namespace ConsoleReversy
             }
         }
 
-        static void SetActiveScorePlayer(ReversyEngine.Player player, bool active) 
+        public static void SetActiveScorePlayer(ReversyEngine.Player player, bool active) 
         {
             if (active)
                 PrintScorePlayer(player, backgroundActivePlayer, foregroundActivePlayer);
@@ -235,7 +241,7 @@ namespace ConsoleReversy
                     break;
                 case ReversyEngine.Player.Player2:
                     var player2 = GetPlayerScore(ReversyEngine.Player.Player2);
-                    var delta = Console.WindowWidth - player2.Length - 5;
+                    var delta =WindowWidth - player2.Length - 5;
                     Console.SetCursorPosition(delta, 2);
                     Console.Write(" {0} ", player2);
                     break;
@@ -261,9 +267,9 @@ namespace ConsoleReversy
             PrintLine();
         }
 
-        static void PrintField()
+        public static void PrintField()
         {
-            var delta = new string(' ', (Console.WindowWidth - _core.CurrentSize.X * 3 - 8) / 2);
+            var delta = new string(' ', (WindowWidth - _core.CurrentSize.X * 3 - 8) / 2);
             Console.Write(delta);
             Console.BackgroundColor = backgroundField;
             Console.ForegroundColor = foregroundFieldHeader;

@@ -35,6 +35,22 @@ namespace ReversyEngine
         {
             X = x; Y = y;
         }
+
+
+        public static bool operator ==(Position pos1, Position pos2)
+        {
+            return pos1.X == pos2.X && pos1.Y == pos2.Y;
+        }
+
+        public static bool operator !=(Position pos1, Position pos2)
+        {
+            return pos1.X != pos2.X || pos1.Y != pos2.Y;
+        }
+
+        public bool Equals(Position other)
+        {
+            return X == other.X && Y == other.Y;
+        }
     }
 
     public struct Line
