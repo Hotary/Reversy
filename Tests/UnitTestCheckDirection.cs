@@ -9,21 +9,20 @@ namespace Tests
 {
     public class UnitTestCheckDirection
     {
-        //Для нового LineFinder
-        //[TestCaseSource(nameof(DirCases))]
-        //public void Test(Field field, Player player, int x, int y, (int, int) dir, bool exist)
-        //{
-        //    var lineFinder = new LineFinder();
-        //    var line = lineFinder.CheckDirection(field, player, new Position(x, y), dir.Item1, dir.Item2);
-        //    if (exist)
-        //    {
-        //        Assert.IsNotNull(line);
-        //    }
-        //    else 
-        //    {
-        //        Assert.IsNull(line);
-        //    }
-        //}
+        [TestCaseSource(nameof(DirCases))]
+        public void Test(Field field, Player player, int x, int y, (int, int) dir, bool exist)
+        {
+            var lineFinder = new LineFinder();
+            var line = lineFinder.CheckDirection(field, player, new Position(x, y), dir.Item1, dir.Item2);
+            if (exist)
+            {
+                Assert.IsNotNull(line);
+            }
+            else
+            {
+                Assert.IsNull(line);
+            }
+        }
 
         static object[] DirCases => PrepareTestCase(); 
 
