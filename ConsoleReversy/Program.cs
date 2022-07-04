@@ -145,25 +145,25 @@ namespace ConsoleReversy
         static void OnMoving(ReversyEngine.Core core, IEnumerable<ReversyEngine.Cell> cells) 
         {
             foreach (var cell in cells) 
-                SetChip(cell.Chip.Player, cell.Position.X, cell.Position.Y);
+                SetChip(cell.Chip.Player, cell.Position);
             core.NextState();
         }
 
-        public static void SetPositionField(int x, int y)
+        public static void SetPositionField(ReversyEngine.Position position)
         {
             var delta = (Console.WindowWidth - _core.CurrentSize.X * 3 ) / 2;
-            Console.SetCursorPosition(delta + x * 3, 6 + y * 2);
+            Console.SetCursorPosition(delta + position.X * 3, 6 + position.Y * 2);
 
         }
 
-        public static void SetChip(ReversyEngine.Player player, int x, int y)
+        public static void SetChip(ReversyEngine.Player player, ReversyEngine.Position position)
         {
             var left = Console.CursorLeft;
             var top = Console.CursorTop;
             var background = Console.BackgroundColor;
             var foreground = Console.ForegroundColor;
 
-            SetPositionField(x, y);
+            SetPositionField(position);
             Console.BackgroundColor = backgroundField;
             Console.ForegroundColor = foregroundPlayer[(int)player - 1];
             Console.Write(PatternChip);
