@@ -13,5 +13,27 @@
     <Design.DataContext>
         <vm:MainWindowViewModel/>
     </Design.DataContext>
-  <view:GameControl x:Name="CoreControl"/>
+  <Grid>
+    <view:GameControl x:Name="CoreControl"/>
+    <Grid x:Name="SelectGame" Background="White">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="100"/>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="20"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="100"/>
+      </Grid.RowDefinitions>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+        <TextBlock Text="Avalonia REVERSY" Grid.Row="1"  Grid.Column="1" TextAlignment="Center"/>
+        <TextBlock x:Name="BtnPlayer"  Background="AliceBlue" TextAlignment="Center"  Text="Player VS Player" Grid.Row="3"  Grid.Column="1"/>
+        <TextBlock x:Name="BtnComputer"  Background="AliceBlue" TextAlignment="Center"  Text="Player VS Computer" Grid.Row="5"  Grid.Column="1"/>
+
+    </Grid>
+  </Grid>
 </Window>

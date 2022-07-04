@@ -79,12 +79,12 @@ namespace ConsoleReversy
 
         static void Main(string[] args)
         {
-            _core = new ReversyEngine.Core(new Params())
+            _core = new ReversyEngine.CoreComputerEnemy(new Params())
             {
                 Finder = new ReversyEngine.LineFinder()
             };
             _core.MovingHandler = OnMoving;
-            _core.StateChanged = OnStatusChanged;
+            _core.StateChanged += OnStatusChanged;
             Console.SetWindowSize(100, 30);
             WindowWidth = Console.WindowWidth;
             PrintGameScreen();

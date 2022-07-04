@@ -131,7 +131,7 @@ namespace ReversyEngine
             }
         }
 
-        public bool IsCanClicked(Position position)
+        public virtual bool IsCanClicked(Position position)
         {
             var cell = Field.GetCell(position);
             if (cell.Chip is object) return false;

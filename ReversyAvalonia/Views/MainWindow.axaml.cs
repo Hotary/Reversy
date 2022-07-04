@@ -32,15 +32,20 @@ namespace AvaloniaReversy.Views
         public MainWindow()
         {
             InitializeComponent();
-            _core = new ReversyEngine.Core(new Params())
-            {
-                Finder = new ReversyEngine.LineFinder()
-            };
+            BtnPlayer.PointerPressed += ClickPlayerGame;
+            BtnComputer.PointerPressed += ClickComputerGame;
+        }
+
+        private void Init(ReversyEngine.Core core) 
+        {
+
+            _core = core;
+            _core.Finder = new ReversyEngine.LineFinder();
             CoreControl = this.FindControl<GameControl>("CoreControl");
             CoreControl.Width = _core.CurrentSize.X;
             CoreControl.Height = _core.CurrentSize.Y;
 
-            _core.StateChanged = (core) => 
+            _core.StateChanged += (core) =>
             {
                 if (core.State == ReversyEngine.CoreState.Move)
                     core.NextState();
@@ -54,7 +59,7 @@ namespace AvaloniaReversy.Views
                     DataContext = vm,
                     IsCanClicked = vm.IsCanClicked,
                 };
-                control.PointerPressed += (s, args) => 
+                control.PointerPressed += (s, args) =>
                 {
                     if (_core.State == ReversyEngine.CoreState.Waiting)
                     {
@@ -63,12 +68,22 @@ namespace AvaloniaReversy.Views
                     }
                 };
                 CoreControl.AddChip(control, vm.X, vm.Y);
-            }           
+            }
         }
 
         private void UpdateMoving() 
         {
 
+        }
+        private void ClickPlayerGame(object sender, Avalonia.Input.PointerPressedEventArgs args)
+        {
+            Init(new ReversyEngine.Core(new Params()));
+            SelectGame.IsVisible = false;
+        }
+        private void ClickComputerGame(object sender, Avalonia.Input.PointerPressedEventArgs args)
+        {
+            Init(new ReversyEngine.CoreComputerEnemy(new Params()));
+            SelectGame.IsVisible = false;
         }
     }
 }
